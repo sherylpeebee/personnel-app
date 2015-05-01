@@ -24,21 +24,39 @@ angular.module("Personnel", ["firebase"])
     $('#myModal').modal('hide');
   };
 
-   $scope.displayNotes = function(employee){
+   $scope.addNote = function(note){
+    var newNote = {
+      note: note,
+      date: new Date().getTime()
+      //to give firebase time in UnixTime (milliseconds since 1970-sumthin)
+    };
+       if ($scope.currentEmployee.notes) {
+       $scope.currentEmployee.notes.push(newNote);
+     } else {
+       $scope.currentEmployee.notes = [];
+       $scope.currentEmployee.notes.push(newNote);
+     }
+     $scope.personnel.$save($scope.currentEmployee);
+     $scope.note = '';
+     // ^^ review this!! ^^
 
-     $scope.currentEmployee = employee;
+    // //  console.log($scope.currentEmployee);
+    //  $scope.newNote.note=note;
+    //  console.log($scope.newNote);
+    // //  debugger;
+    //  $scope.newNote.date = new Date();
+    //  $scope.notes.push($scope.newNote);
+    // //  $scope.currentEmployee.notes=$scope.notes;
+    //  $scope.personnel.$add($scope.notes);
    };
 
-   $scope.addNote = function(){
-     $scope.newNote.date = new Date();
-     $scope.currentEmployee.notes.push($scope.newNote);
-     console.log($scope.currentEmployee.notes);
-     $scope.newNote = '';
+   $scope.displayNotes = function(employee){
+     $scope.currentEmployee = employee;
    };
 
    $scope.isCurrentEmployee = function(employee){
      if($scope.currentEmployee){
-       return $scope.currentEmployee.id === employee.id;
+       return $scope.currentEmployee=== employee;
      } else return false;
    };
 
